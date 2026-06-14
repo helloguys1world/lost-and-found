@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div class="card" style="max-width: 600px; margin: 2rem auto;">
+        <h2>Claim Item</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+            Please provide proof of ownership to claim this item.
+        </p>
+
+        <form action="/claims/submit" method="POST">
+            <input type="hidden" name="found_item_id" value="<%= item.item_id %>">
+            
+            <div class="form-group">
+                <label for="proof_description">Proof Description</label>
+                <textarea name="proof_description" id="proof_description" rows="5" required 
+                    placeholder="Describe unique details, serial numbers, passwords, or contents..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn" style="margin-top: 1rem; width: 100%;">Submit Claim</button>
+        </form>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

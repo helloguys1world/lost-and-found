@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2 style="margin-bottom: 1.5rem; text-align: center;">Claim Item: <%= item.item_name %></h2>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Please provide details to verify your ownership of this item.</p>
+
+    <form action="/claim/<%= item.item_id %>" method="POST" enctype="multipart/form-data" class="auth-form">
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color" required>
+        </div>
+
+        <div class="form-group">
+            <label for="identifying_marks">Identifying Marks (e.g., scratches, unique serial number)</label>
+            <textarea id="identifying_marks" name="identifying_marks" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="location_lost">Where did you lose it?</label>
+            <input type="text" id="location_lost" name="location_lost" required>
+        </div>
+
+        <div class="form-group">
+            <label for="date_lost">When did you lose it?</label>
+            <input type="date" id="date_lost" name="date_lost" required max="<%= new Date().toISOString().split('T')[0] %>">
+        </div>
+
+        <div class="form-group">
+            <label for="proof_description">Additional Proof Description</label>
+            <textarea id="proof_description" name="proof_description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="proof_file">Upload Proof Image (Optional)</label>
+            <input type="file" id="proof_file" name="proof_file" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Submit Claim</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2 style="margin-bottom: 1.5rem; text-align: center;">Report a Lost Item</h2>
+    
+    <form action="/report-lost" method="POST" class="auth-form">
+        <div class="form-group">
+            <label for="item_name">Item Name *</label>
+            <input type="text" id="item_name" name="item_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category_id">Category *</label>
+            <select id="category_id" name="category_id" required>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand">
+        </div>
+        
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color">
+        </div>
+
+        <div class="form-group">
+            <label for="identifying_marks">Identifying Marks</label>
+            <textarea id="identifying_marks" name="identifying_marks" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="description">General Description</label>
+            <textarea id="description" name="description" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="location_lost">Location Lost *</label>
+            <input type="text" id="location_lost" name="location_lost" required>
+        </div>
+
+        <div class="form-group">
+            <label for="date_lost">Date Lost *</label>
+            <input type="date" id="date_lost" name="date_lost" required max="<%= new Date().toISOString().split('T')[0] %>">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Submit Report</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>

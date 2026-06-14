@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<div class="hero">
+    <h1>Welcome to Lost & Found</h1>
+    <p>A centralized platform to report lost items and reunite them with their rightful owners.</p>
+    <div style="margin-top: 2rem;">
+        <a href="/feed" class="btn">Browse Public Feed</a>
+        <% if (!user) { %>
+            <a href="/signup" class="btn btn-secondary">Get Started</a>
+        <% } %>
+    </div>
+</div>
+
+<div class="grid-2" style="margin-top: 3rem;">
+    <div class="card">
+        <h3>Report a Lost Item</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Lost something important? Report it here so the community can help you find it.</p>
+        <a href="/report-lost" class="btn">Report Lost</a>
+    </div>
+    <div class="card">
+        <h3>Report a Found Item</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Found something that doesn't belong to you? Be a hero and help return it.</p>
+        <a href="/report-found" class="btn btn-secondary">Report Found</a>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

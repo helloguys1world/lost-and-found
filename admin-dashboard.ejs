@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Admin Dashboard</h2>
+</div>
+
+<div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+    <div class="card" style="text-align: center;">
+        <h3>Total Users</h3>
+        <p style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"><%= stats.users %></p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3>Lost Items</h3>
+        <p style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"><%= stats.lost %></p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3>Found Items</h3>
+        <p style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"><%= stats.found %></p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3>Announcements Creator</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">Post a global announcement to all users.</p>
+    <form action="/admin/announcements" method="POST">
+        <textarea name="message" rows="3" required placeholder="Type your announcement here..." style="width: 100%; margin-bottom: 1rem;"></textarea>
+        <button type="submit" class="btn">Broadcast Announcement</button>
+    </form>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3>Claims Management</h3>
+    <% if (claims.length === 0) { %>
+        <p style="color: var(--text-muted);">No claims available.</p>
+    <% } else { %>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Item Name</th>
+                        <th>Claimer Name</th>
+                        <th>Proof Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% claims.forEach(claim => { %>
+                        <tr>
+                            <td><%= claim.claim_unique_id %></td>
+                            <td><%= claim.item_name %></td>
+                            <td><%= claim.claimer_name %></td>
+                            <td><%= claim.proof_description %></td>
+                            <td><span class="badge"><%= claim.status %></span></td>
+                            <td>
+                                <% if (claim.status === 'Pending' || claim.status === 'Under Verification') { %>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <form action="/admin/claims/<%= claim.claim_id %>/action" method="POST">
+                                            <input type="hidden" name="action" value="approved">
+                                            <button type="submit" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: #28a745;">Approve</button>
+                                        </form>
+                                        <form action="/admin/claims/<%= claim.claim_id %>/action" method="POST">
+                                            <input type="hidden" name="action" value="rejected">
+                                            <button type="submit" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: #dc3545;">Reject</button>
+                                        </form>
+                                    </div>
+                                <% } else { %>
+                                    -
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3>Users Management</h3>
+    <% if (allUsers.length === 0) { %>
+        <p style="color: var(--text-muted);">No users found.</p>
+    <% } else { %>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% allUsers.forEach(u => { %>
+                        <tr>
+                            <td><%= u.user_id %></td>
+                            <td><%= u.username %></td>
+                            <td><%= u.email %></td>
+                            <td><span class="badge"><%= u.role %></span></td>
+                            <td><%= new Date(u.created_at).toLocaleDateString() %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,91 @@
+<%- include('partials/header') %>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Dashboard</h2>
+    <div>
+        <a href="/report-lost" class="btn" style="margin-right: 1rem;">Report Lost Item</a>
+        <a href="/report-found" class="btn">Report Found Item</a>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <!-- My Lost Items -->
+    <div class="card">
+        <h3>My Lost Items</h3>
+        <% if (lostItems.length === 0) { %>
+            <p style="color: var(--text-muted);">You haven't reported any lost items.</p>
+        <% } else { %>
+            <ul style="list-style: none; padding: 0;">
+                <% lostItems.forEach(item => { %>
+                    <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+                        <strong>[<%= item.unique_item_id %>] <%= item.item_name %></strong><br>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">
+                            Lost on <%= new Date(item.date_lost).toLocaleDateString() %> at <%= item.location_lost %>
+                        </span><br>
+                        <span class="badge" style="margin-top: 0.5rem;"><%= item.status %></span>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+
+    <!-- My Found Items -->
+    <div class="card">
+        <h3>Items I Found</h3>
+        <% if (foundItems.length === 0) { %>
+            <p style="color: var(--text-muted);">You haven't reported any found items.</p>
+        <% } else { %>
+            <ul style="list-style: none; padding: 0;">
+                <% foundItems.forEach(item => { %>
+                    <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+                        <strong>[<%= item.unique_item_id %>] <%= item.item_name %></strong><br>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">
+                            Found on <%= new Date(item.date_found).toLocaleDateString() %> at <%= item.location_found %>
+                        </span><br>
+                        <span class="badge" style="margin-top: 0.5rem;"><%= item.status %></span>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+    <!-- My Claims -->
+    <div class="card">
+        <h3>My Claims</h3>
+        <% if (myClaims.length === 0) { %>
+            <p style="color: var(--text-muted);">You haven't submitted any claims.</p>
+        <% } else { %>
+            <ul style="list-style: none; padding: 0;">
+                <% myClaims.forEach(claim => { %>
+                    <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+                        <strong>[<%= claim.item_unique_id %>] <%= claim.item_name %></strong><br>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Claim ID: <%= claim.claim_unique_id %></span><br>
+                        <span class="badge" style="margin-top: 0.5rem;"><%= claim.status %></span>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+
+    <!-- Claims on My Found Items -->
+    <div class="card">
+        <h3>Claims on Items I Found</h3>
+        <% if (claimsOnMyFoundItems.length === 0) { %>
+            <p style="color: var(--text-muted);">No one has claimed your found items yet.</p>
+        <% } else { %>
+            <ul style="list-style: none; padding: 0;">
+                <% claimsOnMyFoundItems.forEach(claim => { %>
+                    <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+                        <strong>[<%= claim.item_unique_id %>] <%= claim.item_name %></strong><br>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Claimed by <%= claim.claimer_name %> (ID: <%= claim.claim_unique_id %>)</span><br>
+                        <span class="badge" style="margin-top: 0.5rem;"><%= claim.status %></span>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,77 @@
+<%- include('partials/header') %>
+
+<div style="margin-bottom: 2rem;">
+    <h2>Public Feed & Search</h2>
+    <div class="card" style="margin-bottom: 2rem; padding: 1rem;">
+        <form action="/feed" method="GET" class="search-form" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0;">
+            <input type="text" name="search" placeholder="Search item name or description..." value="<%= search || '' %>" style="flex: 1; min-width: 200px;">
+            <input type="text" name="unique_id" placeholder="Item ID (e.g. LF1234)" value="<%= unique_id || '' %>" style="flex: 1; min-width: 150px;">
+            <select name="category_id" style="flex: 1; min-width: 150px;">
+                <option value="">All Categories</option>
+                <% categories.forEach(c => { %>
+                    <option value="<%= c.category_id %>" <%= category_id == c.category_id ? 'selected' : '' %>><%= c.category_name %></option>
+                <% }) %>
+            </select>
+            <select name="status" style="flex: 1; min-width: 150px;">
+                <option value="">All Statuses</option>
+                <option value="Lost" <%= status === 'Lost' ? 'selected' : '' %>>Lost</option>
+                <option value="Found" <%= status === 'Found' ? 'selected' : '' %>>Found</option>
+                <option value="Claimed" <%= status === 'Claimed' ? 'selected' : '' %>>Claimed</option>
+                <option value="Under Verification" <%= status === 'Under Verification' ? 'selected' : '' %>>Under Verification</option>
+                <option value="Returned" <%= status === 'Returned' ? 'selected' : '' %>>Returned</option>
+            </select>
+            <input type="text" name="location" placeholder="Location" value="<%= location || '' %>" style="flex: 1; min-width: 150px;">
+            <input type="date" name="date" value="<%= date || '' %>" style="flex: 1; min-width: 150px;">
+            <button type="submit" class="btn" style="flex: 1; min-width: 100px;">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <% if (items.length === 0) { %>
+        <p style="text-align: center; color: var(--text-muted); padding: 2rem;">No items found matching your criteria.</p>
+    <% } else { %>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>ID</th>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td>
+                                <span class="badge <%= item.item_type.toLowerCase() %>">
+                                    <%= item.item_type %>
+                                </span>
+                            </td>
+                            <td><%= item.unique_item_id %></td>
+                            <td style="font-weight: 600;"><%= item.item_name %></td>
+                            <td style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= item.description %>">
+                                <%= item.description || 'N/A' %>
+                            </td>
+                            <td><%= item.location %></td>
+                            <td><%= new Date(item.date).toLocaleDateString() %></td>
+                            <td><%= item.status %></td>
+                            <td>
+                                <% if(item.item_type.toUpperCase() === 'FOUND' && (item.status === 'available' || item.status === 'Found') && user) { %>
+                                    <a href="/claims/new?item_id=<%= item.item_id %>" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Claim</a>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>
